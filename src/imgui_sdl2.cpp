@@ -152,7 +152,7 @@ namespace ImGui
         const glm::vec4& tintColor,
         const glm::vec4& borderColor) {
         ImTextureID textureID =
-            (ImTextureID)GLFW::GetNativeTexture(texture);
+            (ImTextureID)SDL2::GetNativeTexture(texture);
         ImGui::Image(textureID, size, ImVec2(0, 0), ImVec2(1, 1), tintColor,
             borderColor);
     }
@@ -167,7 +167,7 @@ namespace ImGui
         const glm::vec4& bgColor,
         const glm::vec4& tintColor) {
         ImTextureID textureID =
-            (ImTextureID)GLFW::GetNativeTexture(texture);
+            (ImTextureID)SDL2::GetNativeTexture(texture);
         return ImGui::ImageButton(_id, textureID, ImVec2(size.x, size.y), ImVec2(0, 0), ImVec2(1, 1), bgColor,
             tintColor);
 //        ImageButton(const char* str_id, ImTextureID user_texture_id, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
