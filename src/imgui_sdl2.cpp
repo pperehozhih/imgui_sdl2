@@ -59,14 +59,14 @@ namespace ImGui
             return gl_texture;
         }
 
-        bool Init(SDL_Window* window, SDL_Renderer* render) {
+        bool Init(SDL_Window* window, SDL_Renderer* render, SDL_GLContext* ogl) {
             IMGUI_CHECKVERSION();
             ImGui::CreateContext();
             bool inited = false;
             if (render) {
                 inited = ImGui_ImplSDL2_InitForSDLRenderer(window, render);
             } else {
-                inited = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+                inited = ImGui_ImplSDL2_InitForOpenGL(window, ogl);
             }
             
             if (!inited) {
@@ -91,13 +91,15 @@ namespace ImGui
             ImGui_ImplSDL2_NewFrame();
             ImGui::NewFrame();
         }
-        void Render(SDL_Window* window, SDL_Renderer* render) {
+        void Render(SDL_Window* window, SDL_Renderer* render, SDL_GLContext* ogl) {
             ImGui::Render();
-            SDL_DisplayMode mode;
-            SDL_GetWindowDisplayMode(window, &mode);
+//            SDL_DisplayMode mode;
+            int32_t display_w = 0, display_h = 0;
+            SDL_GetWindowSize(window, &display_w, &display_h);
+//            SDL_GetWindowDisplayMode(window, &mode);
             
 //            glfwGetFramebufferSize(window, &display_w, &display_h);
-            glViewport(0, 0, mode.w, mode.h);
+            glViewport(0, 0, display_w, display_h);
             glClearColor(0, 0, 0, 0);
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

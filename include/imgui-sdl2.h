@@ -16,12 +16,12 @@ namespace ImGui
             uint32_t w = 0;
             uint32_t h = 0;
         };
-        IMGUI_SDL2_API bool Init(SDL_Window* window, SDL_Renderer* render);
+        IMGUI_SDL2_API bool Init(SDL_Window* window, SDL_Renderer* render, SDL_GLContext* ogl);
         IMGUI_SDL2_API void UpdateFontTexture();
 
         IMGUI_SDL2_API void NewFrame();
 
-        IMGUI_SDL2_API void Render(SDL_Window* window, SDL_Renderer* render);
+        IMGUI_SDL2_API void Render(SDL_Window* window, SDL_Renderer* render, SDL_GLContext* ogl);
 
         IMGUI_SDL2_API void SetTextureUnloadInterval(int updateCount);
 
