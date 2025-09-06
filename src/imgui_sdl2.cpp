@@ -131,7 +131,7 @@ namespace ImGui
 
         bool Process(SDL_Window* window) {
             SDL_Event event;
-            bool result = true;
+            bool running = true;
             while(SDL_PollEvent(&event)){
                 ImGui_ImplSDL2_ProcessEvent(&event);
                 if (event.type == SDL_QUIT)
