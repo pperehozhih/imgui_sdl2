@@ -124,6 +124,18 @@ namespace ImGui
         void SetTextureUnloadInterval(int updateCount) {
             g_UnloadTextureInterval = updateCount;
         }
+        bool ProcessEvent(SDL_Window* window) {
+            SDL_Event event;
+            bool running = true;
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                running = false;
+            if (event.type == SDL_WINDOWEVENT &&
+                event.window.event == SDL_WINDOWEVENT_CLOSE &&
+                event.window.windowID == SDL_GetWindowID(window))
+                running = false;
+            return running;
+        }
     }
     // Image overloads
     void Image(const SDL2::SDL2ImageWrapper& texture,

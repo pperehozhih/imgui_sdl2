@@ -24,6 +24,8 @@ namespace ImGui
         IMGUI_SDL2_API void Render(SDL_Window* window, SDL_Renderer* render, SDL_GLContext* ogl);
 
         IMGUI_SDL2_API void SetTextureUnloadInterval(int updateCount);
+    
+        IMGUI_SDL2_API bool ProcessEvent(SDL_Event &event);
 
         IMGUI_SDL2_API void Shutdown();
     }
