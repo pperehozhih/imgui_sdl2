@@ -26,7 +26,7 @@
 #include "misc/freetype/imgui_freetype.cpp"
 
 #include "imgui.h"
-#include "imgui-glfw.h"
+#include "imgui-sdl2.h"
 #include <map>
 
 
@@ -38,8 +38,8 @@ namespace ImGui
         int g_UnloadTextureInterval = 1;
         std::map<void*, std::pair<int, ImTextureID>> g_TexturesCache;
 
-        GLuint GetNativeTexture(const GLFWimage& texture) {
-            auto&& found = g_TexturesCache.find(texture.pixels);
+        GLuint GetNativeTexture(const SDL2::SDL2ImageWrapper& texture) {
+            auto&& found = g_TexturesCache.find(texture.data);
             GLuint gl_texture = 0;
             if (found != g_TexturesCache.end()) {
                 found->second.first = g_UnloadTextureInterval;
@@ -53,16 +53,23 @@ namespace ImGui
 #ifdef GL_UNPACK_ROW_LENGTH
             glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 #endif
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width, texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.pixels);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.w, texture.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.data);
             glBindTexture(GL_TEXTURE_2D, gl_texture);
-            g_TexturesCache[texture.pixels] = std::make_pair(g_UnloadTextureInterval, (ImTextureID)(intptr_t)gl_texture);
+            g_TexturesCache[texture.data] = std::make_pair(g_UnloadTextureInterval, (ImTextureID)(intptr_t)gl_texture);
             return gl_texture;
         }
 
-        bool Init(GLFWwindow* window) {
+        bool Init(SDL_Window* window, SDL_Renderer* render) {
             IMGUI_CHECKVERSION();
             ImGui::CreateContext();
-            if (!ImGui_ImplGlfw_InitForOpenGL(window, true)) {
+            bool inited = false;
+            if (render) {
+                inited = ImGui_ImplSDL2_InitForSDLRenderer(window, render);
+            } else {
+                inited = ImGui_ImplSDL2_InitForOpenGL(window, nullptr);
+            }
+            
+            if (!inited) {
                 fprintf(stderr, "Failed to initialize imgui OpenGL!\n");
                 return false;
             }
@@ -81,14 +88,16 @@ namespace ImGui
         }
         void NewFrame() {
             ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
+            ImGui_ImplSDL2_NewFrame();
             ImGui::NewFrame();
         }
-        void Render(GLFWwindow* window) {
+        void Render(SDL_Window* window, SDL_Renderer* render) {
             ImGui::Render();
-            int display_w, display_h;
-            glfwGetFramebufferSize(window, &display_w, &display_h);
-            glViewport(0, 0, display_w, display_h);
+            SDL_DisplayMode mode;
+            SDL_GetWindowDisplayMode(window, &mode);
+            
+//            glfwGetFramebufferSize(window, &display_w, &display_h);
+            glViewport(0, 0, mode.w, mode.h);
             glClearColor(0, 0, 0, 0);
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -107,7 +116,7 @@ namespace ImGui
         }
         void Shutdown() {
             ImGui_ImplOpenGL3_Shutdown();
-            ImGui_ImplGlfw_Shutdown();
+            ImGui_ImplSDL2_Shutdown();
             ImGui::DestroyContext();
         }
         void SetTextureUnloadInterval(int updateCount) {
@@ -115,12 +124,12 @@ namespace ImGui
         }
     }
     // Image overloads
-    void Image(const GLFWimage& texture,
+    void Image(const SDL2::SDL2ImageWrapper& texture,
         const glm::vec4& tintColor,
         const glm::vec4& borderColor) {
-        Image(texture, glm::vec2(texture.width, texture.height), tintColor, borderColor);
+        Image(texture, glm::vec2(texture.w, texture.h), tintColor, borderColor);
     }
-    void Image(const GLFWimage& texture, const glm::vec2& size,
+    void Image(const SDL2::SDL2ImageWrapper& texture, const glm::vec2& size,
         const glm::vec4& tintColor,
         const glm::vec4& borderColor) {
         ImTextureID textureID =
@@ -130,12 +139,12 @@ namespace ImGui
     }
 
     // ImageButton overloads
-    bool ImageButton(const char* _id, const GLFWimage& texture,
+    bool ImageButton(const char* _id, const SDL2::SDL2ImageWrapper& texture,
         const glm::vec4& bgColor,
         const glm::vec4& tintColor) {
-        return ImageButton(_id, texture, glm::vec2(texture.width, texture.height), bgColor, tintColor);
+        return ImageButton(_id, texture, glm::vec2(texture.w, texture.h), bgColor, tintColor);
     }
-    bool ImageButton(const char* _id, const GLFWimage& texture, const glm::vec2& size,
+    bool ImageButton(const char* _id, const SDL2::SDL2ImageWrapper& texture, const glm::vec2& size,
         const glm::vec4& bgColor,
         const glm::vec4& tintColor) {
         ImTextureID textureID =
