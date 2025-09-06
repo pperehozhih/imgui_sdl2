@@ -125,20 +125,23 @@ namespace ImGui
             g_UnloadTextureInterval = updateCount;
         }
         bool ProcessEvent(SDL_Window* window, SDL_Event &event) {
+            auto result = SDL_PollEvent(&event);
             ImGui_ImplSDL2_ProcessEvent(&event);
-            return true;
+            return result;
         }
 
         bool Process(SDL_Window* window) {
             SDL_Event event;
-            bool running = true;
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                running = false;
-            if (event.type == SDL_WINDOWEVENT &&
-                event.window.event == SDL_WINDOWEVENT_CLOSE &&
-                event.window.windowID == SDL_GetWindowID(window))
-                running = false;
+            bool running = SDL_PollEvent(&event);
+            if (running) {
+                ImGui_ImplSDL2_ProcessEvent(&event);
+                if (event.type == SDL_QUIT)
+                    running = false;
+                if (event.type == SDL_WINDOWEVENT &&
+                    event.window.event == SDL_WINDOWEVENT_CLOSE &&
+                    event.window.windowID == SDL_GetWindowID(window))
+                    running = false;
+            }
             return running;
         }
     }
