@@ -1,10 +1,10 @@
-#ifndef IMGUI_GLFW_H
-#define IMGUI_GLFW_H
+#ifndef IMGUI_SDL2_H
+#define IMGUI_SDL2_H
 
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
-#include "imgui-glfw_export.h"
+#include "imgui-sdl2_export.h"
 
 namespace ImGui
 {
@@ -44,4 +44,4 @@ namespace ImGui
     IMGUI_GLFW_API void DrawLine(const glm::vec2& a, const glm::vec2& b, const glm::vec4& col, float thickness = 1.0f);
 }
 
-#endif //# IMGUI_GLFW_H
+#endif //# IMGUI_SDL2_H

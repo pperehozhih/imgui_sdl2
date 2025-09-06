@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(imgui_glfw)
+project(imgui_sdl2)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -25,9 +25,9 @@ endif()
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 install(FILES 
-    include/imconfig-glfw.h
-    include/imgui-glfw.h
-    include/imgui-glfw_export.h
+    include/imconfig-sdl2.h
+    include/imgui-sdl2.h
+    include/imgui-sdl2_export.h
     imgui/imgui.h
     imgui/imgui_internal.h
     imgui/imstb_rectpack.h

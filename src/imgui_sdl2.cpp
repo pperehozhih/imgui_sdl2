@@ -7,7 +7,7 @@
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM "examples/libs/gl3w/GL/gl3w.h"
 #endif
 #define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
 
 #if defined(__APPLE__)
 #include <OpenGL/gl3.h>
@@ -21,7 +21,7 @@
 #endif
 //#include "backends/imgui_impl_opengl3_loader.h"
 #include "backends/imgui_impl_opengl3.cpp"
-#include "backends/imgui_impl_glfw.cpp"
+#include "backends/imgui_impl_sdl2.cpp"
 #include "misc/cpp/imgui_stdlib.cpp"
 #include "misc/freetype/imgui_freetype.cpp"
 
