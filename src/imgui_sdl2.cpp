@@ -33,7 +33,7 @@
 
 namespace ImGui
 {
-    namespace GLFW
+    namespace SDL2
     {
         int g_UnloadTextureInterval = 1;
         std::map<void*, std::pair<int, ImTextureID>> g_TexturesCache;
