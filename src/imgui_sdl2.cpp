@@ -125,15 +125,14 @@ namespace ImGui
             g_UnloadTextureInterval = updateCount;
         }
         bool ProcessEvent(SDL_Window* window, SDL_Event &event) {
-            auto result = SDL_PollEvent(&event);
             ImGui_ImplSDL2_ProcessEvent(&event);
-            return result;
+            return true;
         }
 
         bool Process(SDL_Window* window) {
             SDL_Event event;
-            bool running = SDL_PollEvent(&event);
-            if (running) {
+            bool result = true;
+            while(SDL_PollEvent(&event)){
                 ImGui_ImplSDL2_ProcessEvent(&event);
                 if (event.type == SDL_QUIT)
                     running = false;
