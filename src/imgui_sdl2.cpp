@@ -124,7 +124,12 @@ namespace ImGui
         void SetTextureUnloadInterval(int updateCount) {
             g_UnloadTextureInterval = updateCount;
         }
-        bool ProcessEvent(SDL_Window* window) {
+        bool ProcessEvent(SDL_Window* window, SDL_Event &event) {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            return true;
+        }
+
+        bool Process(SDL_Window* window) {
             SDL_Event event;
             bool running = true;
             ImGui_ImplSDL2_ProcessEvent(&event);
