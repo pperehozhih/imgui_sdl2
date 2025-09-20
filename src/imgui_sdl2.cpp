@@ -17,6 +17,7 @@
 #include "backends/imgui_impl_opengl3_loader.h"
 //#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #elif __linux__
+#define IMGUI_IMPL_OPENGL_ES3 1
 #include <GLES3/gl32.h>
 #endif
 //#include "backends/imgui_impl_opengl3_loader.h"
